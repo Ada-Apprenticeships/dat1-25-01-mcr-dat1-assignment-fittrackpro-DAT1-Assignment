@@ -3,11 +3,22 @@
 .mode column
 
 -- Enable foreign key support
+PRAGMA foreign_keys = ON;
 
 -- Staff Management Queries
 
 -- 1. List all staff members by role
 -- TODO: Write a query to list all staff members by role
+SELECT staff_id, first_name, last_name, position AS role
+FROM staff
+ORDER BY position ASC;
 
 -- 2. Find trainers with one or more personal training session in the next 30 days
 -- TODO: Write a query to find trainers with one or more personal training session in the next 30 days
+
+SELECT t.staff_id AS trainer_id, t.first_name||' '||t.last_name AS trainer_name, COUNT(s.session_id) AS session_count  
+FROM staff t  
+JOIN personal_training_sessions s ON t.staff_id = s.staff_id  
+WHERE s.session_date BETWEEN DATE('now') AND DATE('now', '+30 days')  
+GROUP BY t.staff_id, trainer_name  
+ORDER BY session_count DESC;
